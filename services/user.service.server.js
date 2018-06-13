@@ -47,8 +47,9 @@ module.exports = function (app) {
 
     function deleteUser(req, res) {
         var id = req.params['userId'];
-        userModel.deleteUser(id);
-        // TODO: return anything?
+        userModel.deleteUser(id).then(function (users) {
+            res.send(users);
+        });
     }
 
 }

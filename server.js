@@ -41,11 +41,6 @@ app.get('/', function (req, res) {
     res.send('Hello World')
 })
 
-app.get('/message/:theMessage', function (req, res) {
-    var theMessage = req.params['theMessage'];
-    res.send(theMessage);
-})
-
 app.get('/api/session/set/:name/:value',
     setSession);
 app.get('/api/session/get/:name',
@@ -65,7 +60,11 @@ function getSession(req, res) {
 }
 
 
-// var userService = require('./services/user.service.server');
-// userService(app);
+var userService = require('./services/user.service.server');
+userService(app);
+
+var reminderService = require('./services/reminder.service.server');
+reminderService(app);
+
 
 app.listen(3000);
