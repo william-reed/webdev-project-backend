@@ -14,6 +14,10 @@ function findAllUsers() {
     return userModel.find();
 }
 
+function findUserByCredentials(credentials) {
+    return userModel.findOne(credentials, {username: 1});
+}
+
 function updateUser() {
     // TODO
     console.log("TODO updateUser");
@@ -23,10 +27,12 @@ function deleteUser(userId) {
     return userModel.findByIdAndDelete(userId);
 }
 
+
 var api = {
     createUser,
     findUserById,
     findAllUsers,
+    findUserByCredentials,
     updateUser,
     deleteUser
 };

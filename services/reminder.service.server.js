@@ -3,6 +3,7 @@ module.exports = function (app) {
     app.get('/api/reminder/:reminderId', findReminderById);
     app.get('/api/reminder', findAllReminders);
     app.get('/api/user/:userId/reminders', findAllRemindersForUser);
+    app.get('/api/user/reminders', findAllRemindersForLoggedInUser);
     app.put('/api/reminder/:reminderId', updateReminder);
     app.delete('/api/reminder/:reminderId', deleteReminder);
 
@@ -34,6 +35,14 @@ module.exports = function (app) {
     function findAllRemindersForUser(req, res) {
         var id = req.params['userId'];
         reminderModel.findRemindersForUser(id)
+            .then(function (reminders) {
+                res.json(reminders);
+            })
+    }
+
+    function findAllRemindersForLoggedInUser(req, res) {
+        user = req['session'];
+        reminderModel.findRemindersForUser(user._id)
             .then(function (reminders) {
                 res.json(reminders);
             })
