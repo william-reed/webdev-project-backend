@@ -3,14 +3,14 @@ module.exports = function (app) {
     app.get('/api/reminder/:reminderId', findReminderById);
     app.get('/api/reminder', findAllReminders);
     app.get('/api/user/:userId/reminders', findAllRemindersForUser);
-    app.get('/api/user/reminders', findAllRemindersForLoggedInUser);
+    app.get('/api/profile/reminders', findAllRemindersForLoggedInUser);
     app.put('/api/reminder/:reminderId', updateReminder);
     app.delete('/api/reminder/:reminderId', deleteReminder);
 
     var reminderModel = require('../models/reminder.model.server');
 
     function createReminder(req, res) {
-        var reminder = req.body;
+        let reminder = req.body;
         reminderModel.createReminder(reminder)
             .then(function (reminder) {
                 res.send(reminder);
@@ -18,7 +18,7 @@ module.exports = function (app) {
     }
 
     function findReminderById(req, res) {
-        var id = req.params['reminderId'];
+        let id = req.params['reminderId'];
         reminderModel.findReminderById(id)
             .then(function (reminder) {
                 res.json(reminder);
@@ -33,7 +33,7 @@ module.exports = function (app) {
     }
 
     function findAllRemindersForUser(req, res) {
-        var id = req.params['userId'];
+        let id = req.params['userId'];
         reminderModel.findRemindersForUser(id)
             .then(function (reminders) {
                 res.json(reminders);
@@ -41,7 +41,8 @@ module.exports = function (app) {
     }
 
     function findAllRemindersForLoggedInUser(req, res) {
-        user = req['session'];
+        let user = req.session['currentUser'];
+        // console.log(user);
         reminderModel.findRemindersForUser(user._id)
             .then(function (reminders) {
                 res.json(reminders);
@@ -49,8 +50,8 @@ module.exports = function (app) {
     }
 
     function updateReminder(req, res) {
-        var id = req.params['reminderId'];
-        var reminder = req.body;
+        let id = req.params['reminderId'];
+        let reminder = req.body;
         reminderModel.updateReminder(reminder)
             .then(function (reminder) {
                 res.send(reminder);
@@ -58,8 +59,9 @@ module.exports = function (app) {
     }
 
     function deleteReminder(req, res) {
-        var id = req.params['reminderId'];
+        let id = req.params['reminderId'];
         reminderModel.deleteReminder(id);
+        res.statusCode(200);
         // TODO: return anything?
     }
 
