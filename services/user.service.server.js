@@ -40,8 +40,8 @@ module.exports = function (app) {
     }
 
     function updateUser(req, res) {
-        var id = req.params['userId'];
-        var user = req.body;
+        let id = req.params['userId'];
+        let user = req.body;
         userModel.updateUser(user)
             .then(function (user) {
                 res.send(user);
@@ -49,25 +49,34 @@ module.exports = function (app) {
     }
 
     function deleteUser(req, res) {
-        var id = req.params['userId'];
+        let id = req.params['userId'];
         userModel.deleteUser(id).then(function (users) {
             res.send(users);
         });
     }
 
     function login(req, res) {
-        var credentials = req.body;
+        let credentials = req.body;
+        if(credentials.username === undefined || credentials.password === undefined) {
+            res.sendStatus(401);
+            return;
+        }
 
-        userModel.findUserByCredentials(credentials)
+        userModel
+            .findUserByCredentials(credentials)
             .then(function (user) {
+                if(user === null) {
+                    res.sendStatus(401);
+                    return;
+                }
                 req.session['currentUser'] = user;
                 res.json(user);
-            })
+            });
     }
 
     function logout(req, res) {
         req.session.destroy();
-        res.send(200);
+        res.sendStatus(200);
     }
 
 }
