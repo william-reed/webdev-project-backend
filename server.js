@@ -32,7 +32,7 @@ db.once('open', function () {
 var session = require('express-session')
 app.use(session({
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     secret: 'any string'
 }));
 

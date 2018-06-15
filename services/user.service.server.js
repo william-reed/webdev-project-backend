@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.put('/api/user/:userId', updateUser);
     app.delete('/api/user/:userId', deleteUser);
 
+    app.get('/api/loggedin', loggedIn);
     app.post('/api/login', login);
     app.post('/api/logout', logout);
 
@@ -55,9 +56,16 @@ module.exports = function (app) {
         });
     }
 
+    function loggedIn(req, res) {
+        // don't want it to ever return undefined
+        let loggedIn = req.session.authenticated
+        loggedIn = loggedIn || false;
+        res.send(loggedIn);
+    }
+
     function login(req, res) {
         let credentials = req.body;
-        if(credentials.username === undefined || credentials.password === undefined) {
+        if (credentials.username === undefined || credentials.password === undefined) {
             res.sendStatus(401);
             return;
         }
@@ -65,18 +73,24 @@ module.exports = function (app) {
         userModel
             .findUserByCredentials(credentials)
             .then(function (user) {
-                if(user === null) {
+                if (user === null) {
                     res.sendStatus(401);
                     return;
                 }
-                req.session['currentUser'] = user;
+                req.session.currentUser = user;
+                req.session.authenticated = true;
                 res.json(user);
             });
     }
 
     function logout(req, res) {
-        req.session.destroy();
-        res.sendStatus(200);
+        if (req.session.authenticated) {
+            req.session.authenticated = false;
+            delete req.session.currentUser;
+            res.sendStatus(200);
+        } else {
+            res.status(500).send('Cannot remove anonymous session');
+        }
     }
 
 }
