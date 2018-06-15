@@ -66,5 +66,8 @@ userService(app);
 var reminderService = require('./services/reminder.service.server');
 reminderService(app);
 
+var recurringService = require('./services/recurring.service.server');
+recurringService(app);
+
 
 app.listen(3000);
