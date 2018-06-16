@@ -1,10 +1,12 @@
-var express = require('express')
+var express = require('express');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://heroku_6k3891bs:73gsp23uusn3j7adgsk7fr75pg@ds263590.mlab.com:63590/heroku_6k3891bs');
 
 
-var app = express()
+var app = express();
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
