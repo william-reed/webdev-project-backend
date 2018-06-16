@@ -42,7 +42,6 @@ module.exports = function (app) {
 
     function findAllRemindersForLoggedInUser(req, res) {
         let user = req.session['currentUser'];
-        // console.log(user);
         reminderModel.findRemindersForUser(user._id)
             .then(function (reminders) {
                 res.json(reminders);
@@ -62,7 +61,6 @@ module.exports = function (app) {
         let id = req.params['reminderId'];
         reminderModel.deleteReminder(id);
         res.statusCode(200);
-        // TODO: return anything?
     }
 
 }

@@ -69,5 +69,8 @@ reminderService(app);
 var recurringService = require('./services/recurring.service.server');
 recurringService(app);
 
+var searchService = require('./services/search.service.server');
+searchService(app);
+
 
 app.listen(3000);

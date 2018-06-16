@@ -27,13 +27,22 @@ function deleteReminder(reminderId) {
     return reminderModel.findByIdAndDelete(reminderId);
 }
 
+function findContainingQuery(query) {
+    return reminderModel.find({
+        content: {
+            "$regex": query, "$options": "i"
+        }
+    }).exec();
+}
+
 var api = {
     createReminder,
     findReminderById,
     findAllReminders,
     findRemindersForUser,
     updateReminder,
-    deleteReminder
+    deleteReminder,
+    findContainingQuery
 };
 
 module.exports = api;
