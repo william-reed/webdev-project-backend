@@ -73,4 +73,4 @@ var searchService = require('./services/search.service.server');
 searchService(app);
 
 
-app.listen(8080);
+app.listen(process.env.PORT || 3000);
