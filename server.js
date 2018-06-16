@@ -6,7 +6,7 @@ mongoose.connect('mongodb://heroku_6k3891bs:73gsp23uusn3j7adgsk7fr75pg@ds263590.
 
 
 var app = express();
-app.use(cors());
+app.use(cors({credentials: true, origin: 'https://wrr-webdev-project-angular.herokuapp.com'}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
