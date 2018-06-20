@@ -73,9 +73,15 @@ module.exports = function (app) {
     }
 
     function deleteReminder(req, res) {
+        if (!req.session.authenticated) {
+            res.status(401).send('User not authenticated');
+            return;
+        }
+        // TODO: make sure the user actually owns the reminder before its deleted
+
         let id = req.params['reminderId'];
-        reminderModel.deleteReminder(id);
-        res.statusCode(200);
+        reminderModel.deleteReminder(id)
+            .then(() => res.sendStatus(200));
     }
 
 }
