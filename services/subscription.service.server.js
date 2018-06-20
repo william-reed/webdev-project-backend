@@ -19,7 +19,7 @@ module.exports = function (app) {
         subscriptionModel.createSubscription(subscription)
             .then(function (subscription) {
                 res.send(subscription);
-            })
+            });
     }
 
     function findSubscriptionById(req, res) {
@@ -27,14 +27,14 @@ module.exports = function (app) {
         subscriptionModel.findSubscriptionById(id)
             .then(function (subscription) {
                 res.json(subscription);
-            })
+            });
     }
 
     function findAllSubscriptions(req, res) {
         subscriptionModel.findAllSubscriptions()
             .then(function (subscriptions) {
                 res.send(subscriptions);
-            })
+            });
     }
 
     function findAllSubscriptionsForUser(req, res) {
@@ -42,7 +42,7 @@ module.exports = function (app) {
         subscriptionModel.findSubscriptionsForUser(id)
             .then(function (subscriptions) {
                 res.json(subscriptions);
-            })
+            });
     }
 
     function findAllSubscriptionsForLoggedInUser(req, res) {
@@ -55,12 +55,21 @@ module.exports = function (app) {
         subscriptionModel.findSubscriptionsForUser(user._id)
             .then(function (subscriptions) {
                 res.json(subscriptions);
-            })
+            });
     }
 
     function updateSubscription(req, res) {
-        console.log('implement update sub');
-        res.sendStatus(500);
+        if (!req.session.authenticated) {
+            res.status(401).send('Must be logged in');
+            return;
+        }
+
+        let subscription = req.body;
+        subscriptionModel.updateSubscription(subscription)
+            .then(function (subscription) {
+                res.send(subscription);
+            });
+
     }
 
     function deleteSubscription(req, res) {

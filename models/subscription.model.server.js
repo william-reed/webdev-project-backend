@@ -18,6 +18,10 @@ function findSubscriptionsForUser(userId) {
     return subscriptionModel.find({userId: userId});
 }
 
+function updateSubscription(subscription) {
+    return subscriptionModel.findOneAndUpdate({'_id': subscription._id}, subscription, {new: true});
+}
+
 function deleteSubscription(subscriptionId) {
     return subscriptionModel.findByIdAndDelete(subscriptionId);
 }
@@ -28,6 +32,7 @@ var api = {
     findSubscriptionById,
     findAllSubscriptions,
     findSubscriptionsForUser,
+    updateSubscription,
     deleteSubscription
 };
 
