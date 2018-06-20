@@ -10,11 +10,21 @@ module.exports = function (app) {
     var reminderModel = require('../models/reminder.model.server');
 
     function createReminder(req, res) {
+        if (!req.session.authenticated) {
+            res.sendStatus(401);
+            return;
+        }
         let reminder = req.body;
+        reminder.userId = req.session.currentUser._id;
         reminderModel.createReminder(reminder)
             .then(function (reminder) {
                 res.send(reminder);
             })
+    }
+
+    function anonymousReminder(req, res) {
+        let reminder = req.body;
+
     }
 
     function findReminderById(req, res) {
@@ -41,6 +51,11 @@ module.exports = function (app) {
     }
 
     function findAllRemindersForLoggedInUser(req, res) {
+        if (!req.session.authenticated) {
+            res.sendStatus(401);
+            return;
+        }
+
         let user = req.session['currentUser'];
         reminderModel.findRemindersForUser(user._id)
             .then(function (reminders) {

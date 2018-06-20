@@ -10,6 +10,11 @@ function findUserById(userId) {
     return userModel.findById(userId);
 }
 
+function usernameAvailable(username) {
+    return userModel.find({username})
+        .then(user => user);
+}
+
 function findAllUsers() {
     return userModel.find();
 }
@@ -18,9 +23,8 @@ function findUserByCredentials(credentials) {
     return userModel.findOne(credentials);
 }
 
-function updateUser() {
-    // TODO
-    console.log("TODO updateUser");
+function updateUser(user) {
+    return userModel.findOneAndUpdate({'_id': user._id}, user, {new: true});
 }
 
 function deleteUser(userId) {
@@ -34,7 +38,8 @@ var api = {
     findAllUsers,
     findUserByCredentials,
     updateUser,
-    deleteUser
+    deleteUser,
+    usernameAvailable
 };
 
 module.exports = api;

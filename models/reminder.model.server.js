@@ -15,7 +15,7 @@ function findAllReminders() {
 }
 
 function findRemindersForUser(userId) {
-    return reminderModel.find({userId});
+    return reminderModel.find({userId: userId});
 }
 
 function updateReminder() {

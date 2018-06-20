@@ -3,26 +3,39 @@ module.exports = function (app) {
     app.get('/api/user/:userId', findUserById);
     app.get('/api/user', findAllUsers);
     app.get('/api/profile', profile);
-    app.put('/api/user/:userId', updateUser);
+    app.put('/api/user', updateUser);
     app.delete('/api/user/:userId', deleteUser);
 
     app.get('/api/loggedin', loggedIn);
     app.post('/api/login', login);
     app.post('/api/logout', logout);
 
-    var userModel = require('../models/user.model.server');
+    let userModel = require('../models/user.model.server');
 
     function createUser(req, res) {
-        var user = req.body;
-        userModel.createUser(user)
-            .then(function (user) {
-                req.session['currentUser'] = user;
-                res.send(user);
+        let user = req.body;
+
+        userModel.usernameAvailable(user.username)
+            .then((dbUsers) => {
+                if (dbUsers.length === 0) {
+                    userModel.createUser(user)
+                        .then(function (createdUser) {
+                            req.session.currentUser = createdUser;
+                            req.session.authenticated = true;
+
+                            res.send(createdUser);
+                            return;
+                        });
+                } else {
+                    res.status(400).send('Username not available.');
+                }
             })
+
+
     }
 
     function findUserById(req, res) {
-        var id = req.params['userId'];
+        let id = req.params['userId'];
         userModel.findUserById(id)
             .then(function (user) {
                 res.json(user);
@@ -41,11 +54,16 @@ module.exports = function (app) {
     }
 
     function updateUser(req, res) {
-        let id = req.params['userId'];
-        let user = req.body;
-        userModel.updateUser(user)
-            .then(function (user) {
-                res.send(user);
+        if (!req.session.authenticated) {
+            res.sendStatus(401);
+            return;
+        }
+
+        let user = req.session.currentUser;
+        let newUser = req.body;
+        userModel.updateUser(newUser)
+            .then(function (updatedUser) {
+                res.send(updatedUser);
             });
     }
 
@@ -58,7 +76,7 @@ module.exports = function (app) {
 
     function loggedIn(req, res) {
         // don't want it to ever return undefined
-        let loggedIn = req.session.authenticated
+        let loggedIn = req.session.authenticated;
         loggedIn = loggedIn || false;
         res.send(loggedIn);
     }
@@ -74,7 +92,7 @@ module.exports = function (app) {
             .findUserByCredentials(credentials)
             .then(function (user) {
                 if (user === null) {
-                    res.sendStatus(401);
+                    res.status(401).send('Invalid username / password given');
                     return;
                 }
                 req.session.currentUser = user;

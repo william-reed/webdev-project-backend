@@ -5,7 +5,7 @@ var userSchema = mongoose.Schema({
     password: String,
     phone: Number,
     carrier: String,
-    isAdmin: Boolean
+    isAdmin: {type: Boolean, default: false}
 }, {collection: 'user'});
 
 module.exports = userSchema;
