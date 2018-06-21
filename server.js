@@ -72,5 +72,8 @@ recurringService(app);
 var searchService = require('./services/search.service.server');
 searchService(app);
 
+var subscriptionService = require('./services/subscription.service.server');
+subscriptionService(app);
+
 
 app.listen(3000);

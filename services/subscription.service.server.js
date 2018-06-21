@@ -16,10 +16,19 @@ module.exports = function (app) {
         }
         let subscription = req.body;
         subscription.userId = req.session.currentUser._id;
-        subscriptionModel.createSubscription(subscription)
-            .then(function (subscription) {
-                res.send(subscription);
-            });
+
+        // is the user already subscribed to this?
+        subscriptionModel.alreadySubscribed(subscription)
+            .then(alreadySubscribed => {
+                if (alreadySubscribed) {
+                    res.status(400).send('You are already subscribed.');
+                } else {
+                    subscriptionModel.createSubscription(subscription)
+                        .then(function (subscription) {
+                            res.send(subscription);
+                        });
+                }
+            })
     }
 
     function findSubscriptionById(req, res) {

@@ -26,6 +26,11 @@ function deleteSubscription(subscriptionId) {
     return subscriptionModel.findByIdAndDelete(subscriptionId);
 }
 
+function alreadySubscribed(subscription) {
+    return subscriptionModel.find({userId: subscription.userId, recurringReminder: subscription.recurringReminder})
+        .then((res) => res.length > 0);
+}
+
 
 var api = {
     createSubscription,
@@ -33,7 +38,8 @@ var api = {
     findAllSubscriptions,
     findSubscriptionsForUser,
     updateSubscription,
-    deleteSubscription
+    deleteSubscription,
+    alreadySubscribed
 };
 
 module.exports = api;
