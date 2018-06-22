@@ -40,6 +40,17 @@ module.exports = function (app) {
     }
 
     function findAllSubscriptions(req, res) {
+        if (!req.session.authenticated) {
+            res.status(401).send('Must be logged in');
+            return;
+        }
+
+        let user = req.session.currentUser;
+        if (!user.isAdmin) {
+            res.status(401).send('Improper privileges to acccess this');
+            return;
+        }
+
         subscriptionModel.findAllSubscriptions()
             .then(function (subscriptions) {
                 res.send(subscriptions);

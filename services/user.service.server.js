@@ -9,6 +9,7 @@ module.exports = function (app) {
     app.get('/api/loggedin', loggedIn);
     app.post('/api/login', login);
     app.post('/api/logout', logout);
+    app.get('/api/admin', isAdmin);
 
     let userModel = require('../models/user.model.server');
 
@@ -29,8 +30,6 @@ module.exports = function (app) {
                     res.status(400).send('Username not available.');
                 }
             })
-
-
     }
 
     function findUserById(req, res) {
@@ -42,6 +41,17 @@ module.exports = function (app) {
     }
 
     function findAllUsers(req, res) {
+        if (!req.session.authenticated) {
+            res.status(401).send('Must be logged in');
+            return;
+        }
+
+        let user = req.session.currentUser;
+        if (!user.isAdmin) {
+            res.status(401).send('Improper privileges to acccess this');
+            return;
+        }
+
         userModel.findAllUsers()
             .then(function (users) {
                 res.send(users);
@@ -108,6 +118,21 @@ module.exports = function (app) {
         } else {
             res.status(500).send('Cannot remove anonymous session');
         }
+    }
+
+    function isAdmin(req, res) {
+        if (!req.session.authenticated) {
+            res.send(false);
+            return;
+        }
+
+        let user = req.session.currentUser;
+        if (!user.isAdmin) {
+            res.send(false)
+            return;
+        }
+
+        res.send(true);
     }
 
 };
