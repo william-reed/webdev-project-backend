@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.post('/api/reminder', createReminder);
+    app.get('/api/reminder/random', findRandomReminders);
     app.get('/api/reminder/:reminderId', findReminderById);
     app.get('/api/reminder', findAllReminders);
     app.get('/api/user/:userId/reminders', findAllRemindersForUser);
@@ -43,6 +44,23 @@ module.exports = function (app) {
             .then(function (reminders) {
                 res.json(reminders);
             })
+    }
+
+
+    function findRandomReminders(req, res) {
+        reminderModel.findAllReminders()
+            .then(function (reminders) {
+                let maxReminders = reminders.length > 15 ? 15 : reminders.length;
+                let randomReminders = [];
+                for (let i = 0; i < maxReminders; i++) {
+                    randomReminders.push(getRandomEntry(reminders));
+                }
+                res.send(randomReminders);
+            })
+    }
+
+    function getRandomEntry(arr) {
+        return arr[Math.round(Math.random() * (arr.length - 1))];
     }
 
     function findAllRemindersForLoggedInUser(req, res) {
