@@ -3,7 +3,8 @@ const recurring = require('../models/recurring.model.server');
 module.exports = function (app) {
     app.post('/api/search/:query', search);
 
-    let reminderModel = require('../models/reminder.model.server');
+    const reminderModel = require('../models/reminder.model.server');
+    const anonymousModel = require('../models/anonymous-reminder.model.server');
 
     function search(req, res) {
         let query = req.params['query'];
@@ -14,9 +15,11 @@ module.exports = function (app) {
 
         // find past reminders that match
         reminderModel.findContainingQuery(query)
-            .then(filteredReminders => res.json({
-                recurring: filteredRecurring,
-                reminders: filteredReminders
-            }));
+            .then(filteredReminders =>
+                anonymousModel.findContainingQuery(query)
+                    .then(filteredAnonymousReminders => res.json({
+                        recurring: filteredRecurring,
+                        reminders: filteredReminders.concat(filteredAnonymousReminders)
+                    })));
     }
 };
