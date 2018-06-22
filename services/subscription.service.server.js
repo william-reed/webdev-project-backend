@@ -7,7 +7,7 @@ module.exports = function (app) {
     app.put('/api/subscription/:subscriptionId', updateSubscription);
     app.delete('/api/subscription/:subscriptionId', deleteSubscription);
 
-    var subscriptionModel = require('../models/subscription.model.server');
+    let subscriptionModel = require('../models/subscription.model.server');
 
     function createSubscription(req, res) {
         if (!req.session.authenticated) {
@@ -93,4 +93,4 @@ module.exports = function (app) {
             .then(() => res.sendStatus(200));
     }
 
-}
+};

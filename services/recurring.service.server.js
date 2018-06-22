@@ -24,4 +24,4 @@ module.exports = function (app) {
     function findRecuringByTitle(title) {
         return recurring.find((element) => element.title === title)
     }
-}
+};

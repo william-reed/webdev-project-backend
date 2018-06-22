@@ -24,7 +24,6 @@ module.exports = function (app) {
                             req.session.authenticated = true;
 
                             res.send(createdUser);
-                            return;
                         });
                 } else {
                     res.status(400).send('Username not available.');
@@ -111,4 +110,4 @@ module.exports = function (app) {
         }
     }
 
-}
+};

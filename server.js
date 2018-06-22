@@ -1,10 +1,10 @@
-var express = require('express')
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/sms_reminder');
 
 
-var app = express()
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -22,14 +22,14 @@ app.use(function (req, res, next) {
 });
 
 // test mongo
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log('Connected to sms_reminder db');
 });
 
 
-var session = require('express-session')
+const session = require('express-session');
 app.use(session({
     resave: false,
     saveUninitialized: false,
@@ -39,41 +39,26 @@ app.use(session({
 
 app.get('/', function (req, res) {
     res.send('Hello World')
-})
-
-app.get('/api/session/set/:name/:value',
-    setSession);
-app.get('/api/session/get/:name',
-    getSession);
-
-function setSession(req, res) {
-    var name = req.params['name'];
-    var value = req.params['value'];
-    req.session[name] = value;
-    res.send(req.session);
-}
-
-function getSession(req, res) {
-    var name = req.params['name'];
-    var value = req.session[name];
-    res.send(value);
-}
+});
 
 
-var userService = require('./services/user.service.server');
+const userService = require('./services/user.service.server');
 userService(app);
 
-var reminderService = require('./services/reminder.service.server');
+const reminderService = require('./services/reminder.service.server');
 reminderService(app);
 
-var recurringService = require('./services/recurring.service.server');
+const recurringService = require('./services/recurring.service.server');
 recurringService(app);
 
-var searchService = require('./services/search.service.server');
+const searchService = require('./services/search.service.server');
 searchService(app);
 
-var subscriptionService = require('./services/subscription.service.server');
+const subscriptionService = require('./services/subscription.service.server');
 subscriptionService(app);
+
+const anonymousReminderService = require('./services/anonymous-reminder.service.server');
+anonymousReminderService(app);
 
 
 app.listen(3000);

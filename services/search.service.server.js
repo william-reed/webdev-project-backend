@@ -3,10 +3,10 @@ const recurring = require('../models/recurring.model.server');
 module.exports = function (app) {
     app.post('/api/search/:query', search);
 
-    var reminderModel = require('../models/reminder.model.server');
+    let reminderModel = require('../models/reminder.model.server');
 
     function search(req, res) {
-        let query = req.params['query']
+        let query = req.params['query'];
 
         // find recurring that match
         const filteredRecurring = recurring
@@ -19,4 +19,4 @@ module.exports = function (app) {
                 reminders: filteredReminders
             }));
     }
-}
+};

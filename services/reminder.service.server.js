@@ -7,7 +7,7 @@ module.exports = function (app) {
     app.put('/api/reminder/:reminderId', updateReminder);
     app.delete('/api/reminder/:reminderId', deleteReminder);
 
-    var reminderModel = require('../models/reminder.model.server');
+    let reminderModel = require('../models/reminder.model.server');
 
     function createReminder(req, res) {
         if (!req.session.authenticated) {
@@ -20,11 +20,6 @@ module.exports = function (app) {
             .then(function (reminder) {
                 res.send(reminder);
             })
-    }
-
-    function anonymousReminder(req, res) {
-        let reminder = req.body;
-
     }
 
     function findReminderById(req, res) {
@@ -84,4 +79,4 @@ module.exports = function (app) {
             .then(() => res.sendStatus(200));
     }
 
-}
+};
