@@ -14,6 +14,14 @@ module.exports = function (app) {
     let userModel = require('../models/user.model.server');
 
     function createUser(req, res) {
+        if (req.session.authenticated) {
+            let user = req.session.currentUser;
+            if (!user.isAdmin) {
+                res.status(400).send('Cannot create a new account when logged in w/o admin status.');
+                return;
+            }
+        }
+
         let user = req.body;
 
         userModel.usernameAvailable(user.username)
@@ -21,10 +29,16 @@ module.exports = function (app) {
                 if (dbUsers.length === 0) {
                     userModel.createUser(user)
                         .then(function (createdUser) {
-                            req.session.currentUser = createdUser;
-                            req.session.authenticated = true;
+                            if (!req.session.authenticated) {
 
-                            res.send(createdUser);
+                                req.session.currentUser = createdUser;
+                                req.session.authenticated = true;
+
+                                res.send(createdUser);
+                            } else {
+                                console.log('user created sending 200');
+                                res.send(createdUser);
+                            }
                         });
                 } else {
                     res.status(400).send('Username not available.');

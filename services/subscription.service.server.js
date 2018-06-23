@@ -15,7 +15,8 @@ module.exports = function (app) {
             return;
         }
         let subscription = req.body;
-        subscription.userId = req.session.currentUser._id;
+        if (!subscription.userId)
+            subscription.userId = req.session.currentUser._id;
 
         // is the user already subscribed to this?
         subscriptionModel.alreadySubscribed(subscription)

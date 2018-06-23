@@ -16,7 +16,9 @@ module.exports = function (app) {
             return;
         }
         let reminder = req.body;
-        reminder.userId = req.session.currentUser._id;
+
+        if (!reminder.userId)
+            reminder.userId = req.session.currentUser._id;
         reminderModel.createReminder(reminder)
             .then(function (reminder) {
                 res.send(reminder);
