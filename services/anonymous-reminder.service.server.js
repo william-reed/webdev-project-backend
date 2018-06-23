@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.post('/api/anonymous-reminder', createAnonymousReminder);
     app.get('/api/anonymous-reminder', findAllAnonymousReminders);
     app.delete('/api/anonymous-reminder/:anonymousReminderId', deleteAnonymousReminder);
+    app.put('/api/anonymous-reminder/:anonymousReminderId', updateAnonymousReminder);
 
     let anonymousReminderModel = require('../models/anonymous-reminder.model.server');
 
@@ -45,6 +46,25 @@ module.exports = function (app) {
         let id = req.params['anonymousReminderId'];
         anonymousReminderModel.deleteAnonymousReminder(id)
             .then((oldAnonymousReminder) => res.send(oldAnonymousReminder));
+    }
+
+    function updateAnonymousReminder(req, res) {
+        if (!req.session.authenticated) {
+            res.status(401).send('Must be logged in');
+            return;
+        }
+
+        let user = req.session.currentUser;
+        if (!user.isAdmin) {
+            res.status(401).send('Improper privileges to access this');
+            return;
+        }
+
+        let reminder = req.body;
+        anonymousReminderModel.updateAnonymousReminder(reminder)
+            .then(function (updatedReminder) {
+                res.send(updatedReminder);
+            });
     }
 
 };

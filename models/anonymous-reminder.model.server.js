@@ -22,11 +22,16 @@ function deleteAnonymousReminder(id) {
     return anonymousReminderModel.findByIdAndDelete(id);
 }
 
+function updateAnonymousReminder(reminder) {
+    return anonymousReminderModel.findOneAndUpdate({'_id': reminder._id}, reminder, {new: true});
+}
+
 const api = {
     createAnonymousReminder,
     findAllAnonymousReminders,
     findContainingQuery,
-    deleteAnonymousReminder
+    deleteAnonymousReminder,
+    updateAnonymousReminder
 };
 
 module.exports = api;
