@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var subscriptionSchema = require('./subscription.schema.server');
-var subscriptionModel = mongoose.model('SubscriptionModel', subscriptionSchema);
+const mongoose = require('mongoose');
+const subscriptionSchema = require('./subscription.schema.server');
+const subscriptionModel = mongoose.model('SubscriptionModel', subscriptionSchema);
 
 function createSubscription(subscription) {
     return subscriptionModel.create(subscription);
@@ -11,7 +11,7 @@ function findSubscriptionById(subscriptionId) {
 }
 
 function findAllSubscriptions() {
-    return subscriptionModel.find();
+    return subscriptionModel.find().populate('userId', 'username');
 }
 
 function findSubscriptionsForUser(userId) {
@@ -32,7 +32,7 @@ function alreadySubscribed(subscription) {
 }
 
 
-var api = {
+const api = {
     createSubscription,
     findSubscriptionById,
     findAllSubscriptions,

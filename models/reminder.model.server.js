@@ -11,7 +11,7 @@ function findReminderById(reminderId) {
 }
 
 function findAllReminders() {
-    return reminderModel.find();
+    return reminderModel.find().populate('userId', 'username');
 }
 
 function findRemindersForUser(userId) {
