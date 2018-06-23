@@ -1,7 +1,7 @@
 module.exports = function (app) {
     app.post('/api/subscription', createSubscription);
-    app.get('/api/subscription/:subscriptionId', findSubscriptionById);
     app.get('/api/subscription', findAllSubscriptions);
+    app.get('/api/subscription/:subscriptionId', findSubscriptionById);
     app.get('/api/user/:userId/subscriptions', findAllSubscriptionsForUser);
     app.get('/api/profile/subscriptions', findAllSubscriptionsForLoggedInUser);
     app.put('/api/subscription/:subscriptionId', updateSubscription);
@@ -101,7 +101,7 @@ module.exports = function (app) {
 
         let id = req.params['subscriptionId'];
         subscriptionModel.deleteSubscription(id)
-            .then(() => res.sendStatus(200));
+            .then(oldSubscription => res.send(oldSubscription));
     }
 
 };

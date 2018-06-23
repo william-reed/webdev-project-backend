@@ -77,9 +77,20 @@ module.exports = function (app) {
     }
 
     function deleteUser(req, res) {
+        if (!req.session.authenticated) {
+            res.status(401).send('Must be logged in');
+            return;
+        }
+
+        let user = req.session.currentUser;
+        if (!user.isAdmin) {
+            res.status(401).send('Improper privileges to acccess this');
+            return;
+        }
+
         let id = req.params['userId'];
-        userModel.deleteUser(id).then(function (users) {
-            res.send(users);
+        userModel.deleteUser(id).then(function (oldUser) {
+            res.send(oldUser);
         });
     }
 
@@ -116,7 +127,7 @@ module.exports = function (app) {
             delete req.session.currentUser;
             res.sendStatus(200);
         } else {
-            res.status(500).send('Cannot remove anonymous session');
+            res.status(400).send('Cannot remove anonymous session');
         }
     }
 

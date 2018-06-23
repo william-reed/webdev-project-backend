@@ -6,6 +6,6 @@ var anonymousReminderSchema = mongoose.Schema({
     phone: Number,
     carrier: String,
     sent: {type: Boolean, default: false},
-}, {collection: 'user'});
+}, {collection: 'anonymous-reminder'});
 
 module.exports = anonymousReminderSchema;

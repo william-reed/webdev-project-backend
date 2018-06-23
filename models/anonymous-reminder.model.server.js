@@ -18,10 +18,15 @@ function findContainingQuery(query) {
     }).exec();
 }
 
+function deleteAnonymousReminder(id) {
+    return anonymousReminderModel.findByIdAndDelete(id);
+}
+
 const api = {
     createAnonymousReminder,
     findAllAnonymousReminders,
-    findContainingQuery
+    findContainingQuery,
+    deleteAnonymousReminder
 };
 
 module.exports = api;

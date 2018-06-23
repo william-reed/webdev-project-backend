@@ -105,7 +105,7 @@ module.exports = function (app) {
 
         let id = req.params['reminderId'];
         reminderModel.deleteReminder(id)
-            .then(() => res.sendStatus(200));
+            .then((oldReminder) => res.send(oldReminder));
     }
 
 };
