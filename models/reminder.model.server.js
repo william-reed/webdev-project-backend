@@ -18,9 +18,8 @@ function findRemindersForUser(userId) {
     return reminderModel.find({userId: userId});
 }
 
-function updateReminder() {
-    // TODO
-    console.log("TODO updateReminder");
+function updateReminder(reminder) {
+    return reminderModel.findOneAndUpdate({'_id': reminder._id}, reminder, {new: true});
 }
 
 function deleteReminder(reminderId) {
