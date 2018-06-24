@@ -113,6 +113,7 @@ module.exports = function (app) {
         // don't want it to ever return undefined
         if (!req.session) {
             res.send(false);
+            return;
         }
         let loggedIn = req.session.authenticated;
         loggedIn = loggedIn || false;
