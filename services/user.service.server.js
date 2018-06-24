@@ -85,9 +85,8 @@ module.exports = function (app) {
         let newUser = req.body;
         userModel.updateUser(newUser)
             .then(function (updatedUser) {
-                if (res.session.currentUser._id === updatedUser._id) {
+                if (req.session.currentUser._id === updatedUser._id)
                     req.session['currentUser'] = updatedUser;
-                }
                 res.send(updatedUser);
             });
     }
