@@ -25,7 +25,7 @@ app.use(session({
     saveUninitialized: false,
     secret: 'any string',
     cookie: {
-        domain: '.herokuapp.com'
+        domain: 'herokuapp.com'
     }
 }));
 
