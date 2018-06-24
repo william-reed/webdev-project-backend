@@ -25,7 +25,7 @@ app.use(session({
     saveUninitialized: false,
     secret: 'any string',
     cookie: {
-        path: 'https://wrr-webdev-project-angular.herokuapp.com'
+        path: 'https://wrr-webdev-project-node.herokuapp.com'
     }
 }));
 
