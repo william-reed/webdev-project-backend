@@ -23,7 +23,10 @@ const session = require('express-session');
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: 'any string'
+    secret: 'any string',
+    cookie: {
+        path: 'https://wrr-webdev-project-angular.herokuapp.com'
+    }
 }));
 
 
