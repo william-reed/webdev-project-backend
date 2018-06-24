@@ -111,6 +111,9 @@ module.exports = function (app) {
 
     function loggedIn(req, res) {
         // don't want it to ever return undefined
+        if (!req.session) {
+            res.send(false);
+        }
         let loggedIn = req.session.authenticated;
         loggedIn = loggedIn || false;
         res.send(loggedIn);
