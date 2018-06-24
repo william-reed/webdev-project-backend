@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var reminderSchema = mongoose.Schema({
+const reminderSchema = mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'},
     content: String,
     timeToSend: Date,

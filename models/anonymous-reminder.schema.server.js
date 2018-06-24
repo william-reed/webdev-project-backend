@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var anonymousReminderSchema = mongoose.Schema({
+const anonymousReminderSchema = mongoose.Schema({
     content: String,
     timeToSend: Date,
     phone: Number,

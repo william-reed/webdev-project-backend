@@ -82,7 +82,6 @@ module.exports = function (app) {
             return;
         }
 
-        let user = req.session.currentUser;
         let newUser = req.body;
         userModel.updateUser(newUser)
             .then(function (updatedUser) {
@@ -153,7 +152,7 @@ module.exports = function (app) {
 
         let user = req.session.currentUser;
         if (!user.isAdmin) {
-            res.send(false)
+            res.send(false);
             return;
         }
 

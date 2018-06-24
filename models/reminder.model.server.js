@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var reminderSchema = require('./reminder.schema.server');
-var reminderModel = mongoose.model('ReminderModel', reminderSchema);
+const mongoose = require('mongoose');
+const reminderSchema = require('./reminder.schema.server');
+const reminderModel = mongoose.model('ReminderModel', reminderSchema);
 
 function createReminder(reminder) {
     return reminderModel.create(reminder);
@@ -34,7 +34,7 @@ function findContainingQuery(query) {
     }).exec();
 }
 
-var api = {
+const api = {
     createReminder,
     findReminderById,
     findAllReminders,
